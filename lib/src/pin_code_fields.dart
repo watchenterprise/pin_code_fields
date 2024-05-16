@@ -211,6 +211,9 @@ class PinCodeTextField extends StatefulWidget {
   /// Enable auto unfocus
   final bool autoUnfocus;
 
+  /// Enables alert dialog which asks about text paste
+  final bool disableAlertPasteDialog;
+
   /// Builds separator children
   final IndexedWidgetBuilder? separatorBuilder;
 
@@ -271,6 +274,7 @@ class PinCodeTextField extends StatefulWidget {
     this.textGradient,
     this.readOnly = false,
     this.autoUnfocus = true,
+    this.disableAlertPasteDialog = false,
 
     /// Default for [AutofillGroup]
     this.onAutoFillDisposeAction = AutofillContextAction.commit,
@@ -697,6 +701,11 @@ class _PinCodeTextFieldState extends State<PinCodeTextField>
     final formattedPastedText = pastedText
         .trim()
         .substring(0, min(pastedText.trim().length, widget.length));
+
+    if (widget.disableAlertPasteDialog) {
+      _textEditingController!.text = formattedPastedText;
+      return Future.value(null);
+    }
 
     final defaultPastedTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
